@@ -1,0 +1,19 @@
+services:
+  setupapp:
+    build: .
+    entrypoint: ["python", "/app/init_db.py"]
+    volumes:
+      - data:/data/
+    restart: on-failure
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - data:/data/
+    depends_on:
+      setupapp:
+        condition: service_completed_successfully
+
+volumes:
+  data:
